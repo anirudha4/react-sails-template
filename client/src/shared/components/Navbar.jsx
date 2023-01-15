@@ -24,7 +24,10 @@ function Navbar() {
                 </div>
                 <div className="right">
                     {user ? (
-                        <button onClick={handleLogout}>Logout {user.name}</button>
+                        <div className="auth-link">
+                            <span className="primary">Welcome, {user.name}</span>
+                            <button className='btn-danger' onClick={handleLogout}>Logout</button>
+                        </div>
                     ) : (
                         <div className='navbar-links'>
                             <Link to={'/auth'} className="navbar-links-link">
