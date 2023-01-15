@@ -29,7 +29,7 @@ module.exports = {
     if (inputs.id === CURRENT_USER_ID) {
       ({ currentUser: user } = this.req);
 
-      if (inputs.subscribe && this.req.isSocket) {
+      if (this.req.isSocket) {
         sails.sockets.join(this.req, `user:${user.id}`);
       }
     } else {
@@ -39,7 +39,6 @@ module.exports = {
         throw Errors.USER_NOT_FOUND;
       }
     }
-
     return {
       item: user,
     };
