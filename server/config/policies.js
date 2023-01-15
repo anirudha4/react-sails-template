@@ -19,7 +19,8 @@ module.exports.policies = {
   '*': true,
 
   // users
-  'users/delete': ['is-authenticated', 'is-admin'],
+  'users/*': ['is-authenticated'],
+  'users/create': true,
 
   'access-tokens/create': true,
 };

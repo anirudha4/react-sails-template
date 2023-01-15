@@ -7,8 +7,8 @@ const loginAction = (state, action) => {
     state.currentUser = action.payload
 }
 const registerAction = (state, action) => {
-    console.log(state, action);
 }
+
 
 
 const initialState = {

@@ -1,3 +1,57 @@
-.app-layout {
-    
+$light-border: rgba(84, 84, 84, 0.48);
+$text: rgba(255, 255, 255, 0.87);
+$background-dark: #1a1a1a;
+
+$primary: #9499ff;
+
+body {
+    background-color: $background-dark;
+    color: $text;
+}
+a {
+    color: $text;
+    text-decoration: none;
+}
+
+// layout styles
+.root-layout {
+    display: flex;
+    flex-direction: column;
+
+    // navbar container
+    .navbar-container {
+        padding: 0 10px;
+        height: 60px;
+        border-bottom: 1px solid $light-border;
+
+        // navbar
+        nav.navbar {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            // left side of navbar
+            .left {
+                .logo {
+                    font-weight: 500;
+                    color: $primary;
+                }
+            }
+            // right side of navbar
+            .right {
+                .navbar-links {
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
+                    .navbar-links-link {
+                        font-weight: 500;
+                        transition: all .2s;
+                        &:hover, &.active {
+                            color: $primary;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

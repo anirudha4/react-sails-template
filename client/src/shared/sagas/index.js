@@ -1,7 +1,8 @@
-import { all, apply, call } from "redux-saga/effects";
+import { all, apply, call, put, take } from "redux-saga/effects";
 import socket from "../../api/socket";
 import { authorize, authWatcher } from "../../pages/Auth/saga";
 import { getAccessTokenFromLocalStore } from "../../utils/authentication";
+import { coreInitialized } from "../slices/core";
 import socketWatchers from "./socket-event-channel";
 
 export default function* rootSaga() {
@@ -13,11 +14,12 @@ export default function* rootSaga() {
         if (accessToken) {
             yield call(authorize, accessToken);
         }
+        yield put(coreInitialized());
         yield all([
             authWatcher(),
             socketWatchers()
-        ])
+        ]);
     } catch (err) {
-        console.log(err.message);
+        console.log(err.message, err);
     }
 }

@@ -1,10 +1,8 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { createAction } from "@reduxjs/toolkit"
 import { authorizeSelf, generateAccessToken, register } from '../../api/user';
-import { locationChange } from '../../shared/slices/router';
 import { loginSuccess, registerSuccess } from '../../shared/slices/auth';
-import { generateAuthenticationHeaders, setAccessTokenToLocalStore } from '../../utils/authentication';
-import { coreInitialized } from '../../shared/slices/core';
+import { clearAccessTokenToLocalStore, generateAuthenticationHeaders, setAccessTokenToLocalStore } from '../../utils/authentication';
 
 export const requestRegister = createAction('auth/register');
 
@@ -16,6 +14,8 @@ export const requestLogin = createAction('auth/login', function prepare(payload)
     }
   }
 });
+
+export const requestLogout = createAction('/auth/logout');
 
 /**
  * 
@@ -30,7 +30,7 @@ export function* registerWorker({ payload }) {
   try {
     yield call(register, payload);
     yield put(registerSuccess(payload));
-    yield put(locationChange('/auth'));
+    history.pushState(null, '/auth');
   } catch (err) {
     console.error(err.message);
   }
@@ -48,15 +48,19 @@ export function* loginWorker({ payload }) {
   yield call(authorize, accessToken);
   yield call(setAccessTokenToLocalStore, accessToken);
 }
+export function* logoutWorker() {
+  yield call(clearAccessTokenToLocalStore);
+  window.location.href = '/auth';
+}
 
 export function* authWatcher() {
   yield takeEvery(requestRegister.type, registerWorker);
   yield takeEvery(requestLogin.type, loginWorker);
+  yield takeEvery(requestLogout.type, logoutWorker);
 }
 
 export function* authorize(accessToken) {
   const { item: user } = yield call(authorizeSelf, generateAuthenticationHeaders(accessToken));
   yield put(loginSuccess(user));
-  yield put(coreInitialized());
   return user;
 }

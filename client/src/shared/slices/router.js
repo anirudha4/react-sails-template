@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createBrowserHistory } from 'history';
 
-const history = createBrowserHistory();
+export const history = createBrowserHistory();
 
 // actions
-const locationChangeAction = (state, action) => {
+const locationChangeAction = (state, action) => {   
     state.location = action.payload
 }
 

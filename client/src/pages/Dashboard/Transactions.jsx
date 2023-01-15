@@ -1,4 +1,5 @@
 import React from 'react'
+import withGaurd from '../../shared/hoc/withGaurd';
 
 function Transactions() {
   return (
@@ -6,4 +7,4 @@ function Transactions() {
   )
 }
 
-export default Transactions
+export default withGaurd(Transactions)
