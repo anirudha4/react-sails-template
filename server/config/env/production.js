@@ -131,9 +131,9 @@ module.exports = {
      */
 
     cors: {
-      // allowOrigins: [
-      //   'https://example.com',
-      // ],
+      allowOrigins: [
+        process.env.CLIENT_BASE_URL
+      ],
     },
   },
 
@@ -218,7 +218,7 @@ module.exports = {
      *
      */
 
-    onlyAllowOrigins: [new url.URL(process.env.CLIENT_BASE_URL).origin],
+    onlyAllowOrigins: [process.env.CLIENT_BASE_URL],
 
     /**
      *
