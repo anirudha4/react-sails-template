@@ -30,6 +30,10 @@ module.exports.routes = {
   'DELETE /api/users/:id': 'users/delete',
 
 
+  // test route
+  'GET /api/test': 'test/index',
+
+
   'GET /*': {
     view: 'index',
     skipAssets: true,
