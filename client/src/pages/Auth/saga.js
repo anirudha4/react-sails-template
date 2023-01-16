@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import { createAction } from "@reduxjs/toolkit"
 import { authorizeSelf, generateAccessToken, register } from '../../api/user';
 import { loginSuccess, registerSuccess } from '../../shared/slices/auth';
@@ -30,7 +30,6 @@ export function* registerWorker({ payload }) {
   try {
     yield call(register, payload);
     yield put(registerSuccess(payload));
-    history.pushState(null, '/auth');
   } catch (err) {
     console.error(err.message);
   }
@@ -44,19 +43,27 @@ export function* registerWorker({ payload }) {
  */
 
 export function* loginWorker({ payload }) {
-  const { item: accessToken } = yield call(generateAccessToken, payload);
-  yield call(authorize, accessToken);
-  yield call(setAccessTokenToLocalStore, accessToken);
+  try {
+    // get access token
+    const { item: accessToken } = yield call(generateAccessToken, payload);
+    // get user from access token
+    yield call(authorize, accessToken);
+    // store the access token in local storage
+    yield call(setAccessTokenToLocalStore, accessToken);
+  } catch (err) {
+    console.log(err.message);
+  }
 }
+
 export function* logoutWorker() {
   yield call(clearAccessTokenToLocalStore);
   window.location.href = '/auth';
 }
 
 export function* authWatcher() {
-  yield takeEvery(requestRegister.type, registerWorker);
-  yield takeEvery(requestLogin.type, loginWorker);
-  yield takeEvery(requestLogout.type, logoutWorker);
+  yield takeLatest(requestRegister.type, registerWorker);
+  yield takeLatest(requestLogin.type, loginWorker);
+  yield takeLatest(requestLogout.type, logoutWorker);
 }
 
 export function* authorize(accessToken) {
